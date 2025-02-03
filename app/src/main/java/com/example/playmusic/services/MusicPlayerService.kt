@@ -6,6 +6,7 @@ import android.app.Service
 import android.content.ContentUris
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.Build
@@ -155,6 +156,9 @@ class MusicPlayerService : Service() {
                 currentDuration.update { mediaPlayer.currentPosition.toFloat() }
                 sendNotification(currentTrack.value)
                 delay(1000)
+                mediaPlayer.setOnCompletionListener {
+                    next()
+                }
             }
         }
     }
@@ -207,15 +211,15 @@ class MusicPlayerService : Service() {
                 createPlayPausePendingIntent()
             )
             .addAction(R.drawable.ic_next, "next", createNextPendingIntent())
-            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setSilent(true)
-//            .setLargeIcon(
-//                BitmapFactory.decodeResource(
-//                    resources,
-//                    R.drawable.ic_launcher_background
-//                )
-//            )
+            .setLargeIcon(
+                BitmapFactory.decodeResource(
+                    resources,
+                    R.drawable.banner
+                )
+            )
             .build()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

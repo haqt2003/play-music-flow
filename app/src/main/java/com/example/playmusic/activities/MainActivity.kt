@@ -20,6 +20,7 @@ import com.example.playmusic.adapters.TrackAdapter
 import com.example.playmusic.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class MainActivity : AppCompatActivity(), TrackAdapter.OnAdapterListener {
@@ -56,7 +57,11 @@ class MainActivity : AppCompatActivity(), TrackAdapter.OnAdapterListener {
     private fun startScan() {
         lifecycleScope.launch(Dispatchers.IO) {
             val tmp = getFile()
-            tracks.addAll(tmp)
+            withContext(Dispatchers.Main) {
+                tracks.clear()
+                tracks.addAll(tmp)
+                adapter.notifyDataSetChanged()
+            }
         }
     }
 
@@ -134,8 +139,10 @@ class MainActivity : AppCompatActivity(), TrackAdapter.OnAdapterListener {
 
         if (requestCode == 100) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startScan()
                 Toast.makeText(this, "Quyền đã được cấp", Toast.LENGTH_SHORT).show()
             } else {
+                requestPermission()
                 Toast.makeText(this, "Quyền bị từ chối", Toast.LENGTH_SHORT).show()
             }
         }

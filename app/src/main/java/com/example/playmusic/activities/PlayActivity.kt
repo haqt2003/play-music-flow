@@ -20,7 +20,6 @@ import com.example.playmusic.models.Track
 import com.example.playmusic.composables.formatDuration
 import com.example.playmusic.databinding.ActivityPlayBinding
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -93,7 +92,6 @@ class PlayActivity : AppCompatActivity() {
             interpolator = LinearInterpolator()
             repeatCount = ObjectAnimator.INFINITE
         }
-
 
         val receivedTracks = intent.getParcelableArrayListExtra<Track>("tracks")
         if (receivedTracks.isNullOrEmpty()) {
