@@ -40,6 +40,7 @@ class PlayActivity : AppCompatActivity() {
 
     private lateinit var rotateAnimator: ObjectAnimator
     private var isRotating = false
+    private var isRepeatOne = false
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
@@ -127,6 +128,12 @@ class PlayActivity : AppCompatActivity() {
 
             ivNext.setOnClickListener {
                 service?.next()
+            }
+
+            ivRepeat.setOnClickListener {
+                isRepeatOne = !isRepeatOne
+                ivRepeat.setImageResource(if (isRepeatOne) R.drawable.ic_repeat_one else R.drawable.ic_repeat)
+                service?.repeat()
             }
 
             ivClose.setOnClickListener {

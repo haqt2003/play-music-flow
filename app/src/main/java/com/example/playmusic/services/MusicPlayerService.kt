@@ -66,6 +66,8 @@ class MusicPlayerService : Service() {
 
     private val isPlaying = MutableStateFlow(false)
 
+    private var isRepeatOne = false
+
     private var job: Job? = null
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -137,6 +139,10 @@ class MusicPlayerService : Service() {
         }
     }
 
+    fun repeat() {
+        isRepeatOne = !isRepeatOne
+    }
+
     fun playPause() {
         if (mediaPlayer.isPlaying) {
             mediaPlayer.pause()
@@ -157,7 +163,11 @@ class MusicPlayerService : Service() {
                 sendNotification(currentTrack.value)
                 delay(1000)
                 mediaPlayer.setOnCompletionListener {
-                    next()
+                    if (isRepeatOne) {
+                        mediaPlayer.start()
+                    } else {
+                        next()
+                    }
                 }
             }
         }
